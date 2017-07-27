@@ -1,10 +1,8 @@
 Refinery::Core::Engine.routes.append do
-
-  # Admin routes
   namespace :image_slideshows, :path => '' do
     namespace :admin, :path => Refinery::Core.backend_route do
-      resources :image_slideshows do
-        resources :image_slides, :except => :show do
+      resources :image_slideshows, only: [:index] do
+        resources :image_slides, :except => [:show]do
           collection do
             post :update_positions
           end
@@ -15,5 +13,4 @@ Refinery::Core::Engine.routes.append do
       end
     end
   end
-
 end

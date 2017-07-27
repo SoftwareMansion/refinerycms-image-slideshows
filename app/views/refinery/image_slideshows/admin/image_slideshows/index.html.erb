@@ -1,7 +1,10 @@
-<section id='records'>
-  <%= render 'records' %>
-</section>
-<aside id='actions'>
-  <%= render 'actions' %>
-</aside>
-<%= render '/refinery/admin/make_sortable', :tree => false if !searching? and ::Refinery::ImageSlideshows::Admin::ImageSlideshowsController.sortable? and ::Refinery::ImageSlideshows::ImageSlideshow.count > 1 %>
+<div class="row">
+  <div class="collection-header col s12">
+    <h4>Image Slideshows</h4>
+  </div>
+
+  <section class="col s8 offset-s2">
+    <%= render 'records' %>
+  </section>
+  <%= render '/refinery/admin/make_sortable', :tree => false if !searching? and ::Refinery::ImageSlideshows::Admin::ImageSlideshowsController.sortable? and ::Refinery::ImageSlideshows::ImageSlideshow.count > 1 %>
+</div>

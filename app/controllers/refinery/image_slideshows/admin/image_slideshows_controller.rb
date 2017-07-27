@@ -11,9 +11,6 @@ module Refinery
             params.require(:image_slideshow).permit(
               :title,
               :position,
-              :js_config,
-              :height,
-              :width
             )
           end
       end

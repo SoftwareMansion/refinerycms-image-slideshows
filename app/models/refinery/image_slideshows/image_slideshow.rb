@@ -8,6 +8,8 @@ module Refinery
       validates :title, :presence => true, :uniqueness => true
 
       has_many :image_slides, :dependent => :destroy
+
+      TYPES = [:casino, :live_casino, :sportsbook, :e_sports, :home]
     end
   end
 end

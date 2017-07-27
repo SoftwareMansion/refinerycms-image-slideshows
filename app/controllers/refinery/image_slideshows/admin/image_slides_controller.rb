@@ -38,24 +38,29 @@ module Refinery
             redirect_to image_slides_path, :notice => t('deleted', :scope => 'refinery.image_slideshows.admin.image_slides')
           end
         end
-        
+
         protected
-        
+
           def image_slide_params
             params.require(:image_slide).permit(permitted_image_slide_params)
           end
 
         private
-      
+
           def permitted_image_slide_params
             [
               :id,
-              :title,
-              :image_id,
-              :caption,
-              :link_url,
               :body,
+              :title,
+              :end_at,
+              :caption,
+              :image_id,
+              :link_url,
               :position,
+              :duration,
+              :start_at,
+              :color_theme,
+              :button_content,
               :image_slideshow_id
             ]
           end

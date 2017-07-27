@@ -1,47 +1,103 @@
-<%= form_for [refinery, :image_slideshows_admin, @image_slideshow, @image_slide] do |f| %>
-  <%= render '/refinery/admin/error_messages',
-              :object => @image_slide,
-              :include_object_name => true %>
-
-  <%= render '/refinery/admin/locale_picker',
-              :current_locale => Globalize.locale %>
+<%= form_for(
+  [refinery, :image_slideshows_admin, @image_slideshow, @image_slide],
+  html: { class: 'row' }
+) do |f| %>
+  <div class="col s12">
+    <%= render '/refinery/admin/error_messages',
+                :object => @image_slide,
+                :include_object_name => true %>
+  </div>
+  <div class="col s12">
+    <%= render '/refinery/admin/locale_picker',
+                :current_locale => Globalize.locale %>
+  </div>
 
   <%= f.hidden_field :image_slideshow_id, :value => @image_slideshow.id  %>
 
-  <div class='field'>
-    <%= f.label :title %>
-    <%= f.text_field :title, :class => 'larger widest'  %>
+  <div class="col s12 m6">
+    <div class="row">
+      <div class='field'>
+        <%= f.label :title %>
+        <%= f.text_field :title %>
+      </div>
+
+      <div class='field'>
+        <%= f.label :link_url %>
+        <%= f.text_field :link_url %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class='col s6'>
+        <%= f.label :caption %>
+        <%= f.text_field :caption %>
+      </div>
+
+      <div class='col s6'>
+        <%= f.label 'Duration [S]' %>
+        <%= f.number_field :duration %>
+      </div>
+      <div class='col s6'>
+        <%= f.label :start_at %>
+        <%= f.date_field :start_at %>
+      </div>
+
+      <div class='col s6'>
+        <%= f.label :end_at %>
+        <%= f.date_field :end_at %>
+      </div>
+    </div>
   </div>
 
-  <div class='field'>
-    <%= f.label :image %>
-    <%= render '/refinery/admin/image_picker',
-               :f => f,
-               :field => :image_id,
-               :image => @image_slide.image,
-               :toggle_image_display => false %>
+  <div class='col s12 m6'>
+    <div class='col s12 l6 offset-l3'>
+      <%= f.label :image %>
+      <%= render '/refinery/admin/image_picker',
+                 :f => f,
+                 :field => :image_id,
+                 :image => @image_slide.image,
+                 :toggle_image_display => false %>
+    </div>
   </div>
 
-  <div class='field'>
-    <%= f.label :caption %>
-    <%= f.text_field :caption %>
+  <div class='col s12 m6'>
+    <div class='col s12 l6 offset-l3' style="padding: 10px 0 20px 0;">
+      <%= f.label :color_theme %>
+      <%= f.hidden_field :color_theme, as: :minicolors, data: { minicolors: true } %>
+    </div>
+    <div class='col s12 l6 offset-l3' style="padding: 10px 0 20px 0;">
+      <%= f.label :button_content %>
+      <%= f.hidden_field :button_content %>
+      <div id="slider_button" contenteditable="true" class="col s12 slider-buttton">
+        <%= @image_slide.button_content.try(:html_safe) %>
+      </div>
+    </div>
   </div>
 
-  <div class='field'>
-    <%= f.label :link_url %>
-    <%= f.text_field :link_url %>
-  </div>
-
-  <div class='field'>
+  <div class='field col s12'>
     <%= f.label :body %>
-    <%= f.text_area :body, :rows => 5, :class => 'widest wymeditor' -%>
+    <%= f.text_area :body, :rows => 5, :class => 'widest ckeditor' -%>
   </div>
-  <% delete_url = @image_slide.id ? refinery.image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, @image_slide) : nil %>
 
-  <%= render '/refinery/admin/form_actions', :f => f,
-             :continue_editing => false,
-             :delete_title => t('delete', :scope => 'refinery.image_slideshows.admin.image_slides.image_slide'),
-             :delete_confirmation => t('message', :scope => 'refinery.admin.delete', :title => @image_slide.title),
-             :delete_url => delete_url,
-             :cancel_url => refinery.image_slideshows_admin_image_slideshow_image_slides_path(@image_slideshow) %>
+  <div class="col s12">
+    <% delete_url = @image_slide.id ? refinery.image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, @image_slide) : nil %>
+
+    <%= render '/refinery/admin/form_actions', :f => f,
+               :continue_editing => false,
+               :delete_title => t('delete', :scope => 'refinery.image_slideshows.admin.image_slides.image_slide'),
+               :delete_confirmation => t('message', :scope => 'refinery.admin.delete', :title => @image_slide.title),
+               :delete_url => delete_url,
+               :cancel_url => refinery.image_slideshows_admin_image_slideshow_image_slides_path(@image_slideshow) %>
+  </div>
 <% end %>
+
+<script>
+  $(document).ready(function() {
+    CKEDITOR.disableAutoInline = true;
+
+    CKEDITOR.inline('slider_button');
+    CKEDITOR.instances.slider_button.on('change', function( evt ) {
+      $('#image_slide_button_content').val(evt.editor.getData());
+    });
+  })
+</script>

@@ -1,22 +1,40 @@
-<li class='clearfix record <%= cycle("on", "on-hover") %>' id="<%= dom_id(image_slide) -%>" style="background-color: #EAEAEA; margin-bottom: 10px;">
-  <%= image_fu image_slide.image, '128x128', :style => 'padding: 1em 1em 0 1em;' %>
-  <span class="preview">
-    <% image_slide.translations.each do |translation| %>
-      <% if translation.title.present? %>
-        <%= link_to refinery_icon_tag("flags/#{translation.locale}.png", :size => '16x11'),
+<li
+  class='collection-item record <%= cycle("on", "on-hover") %>'
+  id="<%= dom_id(image_slide) -%>"
+>
+
+  <% if Date.today.between?(
+      image_slide.try(:start_at) || Date.yesterday,
+      image_slide.try(:end_at) || Date.tomorrow
+  )%>
+    <span class="badge teal lighten-2" data-badge-caption="ACTIVE"></span>
+  <% elsif image_slide.end_at && image_slide.end_at.past? %>
+    <span class="badge red darken-3" data-badge-caption="FINISHED"></span>
+  <% elsif image_slide.start_at && image_slide.start_at.future? %>
+    <span class="badge orange lighten-3" data-badge-caption="PENDING"></span>
+  <% end %>
+
+  <div class="row" style="display: flex; align-items: center;">
+    <div class="col s1">
+      <%= image_fu image_slide.image, '128x128', :style => 'padding: 1em 1em 0 1em;' %>
+    </div>
+    <div class="col s8">
+      <% image_slide.translations.each do |translation| %>
+        <% if translation.title.present? %>
+          <%= link_to refinery_icon_tag("flags/#{translation.locale}.png", :size => '16x11'),
             refinery.edit_image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, image_slide, :switch_locale => translation.locale),
             :class => 'locale' %>
         <% end %>
-    <% end %>
-  </span>
-
-  <span class='actions'>
-    <%= link_to refinery_icon_tag("application_edit.png"), refinery.edit_image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, image_slide),
-         :title => t('.edit') %>
-    <%= link_to refinery_icon_tag("delete.png"), refinery.image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, image_slide),
+      <% end %>
+    </div>
+    <div class='col s3 right-align'>
+      <%= link_to refinery_icon_tag("application_edit.png"), refinery.edit_image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, image_slide),
+        :title => t('.edit') %>
+        <%= link_to refinery_icon_tag("delete.png"), refinery.image_slideshows_admin_image_slideshow_image_slide_path(@image_slideshow, image_slide),
         :class => "cancel confirm-delete",
         :title => t('.delete'),
         :confirm => t('message', :scope => 'refinery.admin.delete', :title => image_slide.title),
         :method => :delete %>
-  </span>
+    </div>
+  </div>
 </li>

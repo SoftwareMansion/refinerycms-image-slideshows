@@ -1,10 +1,15 @@
-<% if @image_slideshow.present? %>
-  <h2><%= "#{t('.slideshow')} : #{@image_slideshow.title}" %></h2>
-<% end %>
-<section id='records'>
-  <%= render 'records' %>
-</section>
-<aside id='actions'>
-  <%= render 'actions' %>
-</aside>
-<%= render '/refinery/admin/make_sortable', :tree => false if ::Refinery::ImageSlideshows::ImageSlide.count > 1 %>
+<div class="row">
+  <section class="col s12">
+    <% if @image_slideshow.present? %>
+      <h4><%= @image_slideshow.title.titleize %></h4>
+    <% end %>
+  </section>
+  <section class="col s8">
+    <%= render 'records' %>
+  </section>
+  <aside id="actions" class="col s4">
+    <%= render 'actions' %>
+  </aside>
+
+  <%= render '/refinery/admin/make_sortable', :tree => false if ::Refinery::ImageSlideshows::ImageSlide.count > 1 %>
+</div>
